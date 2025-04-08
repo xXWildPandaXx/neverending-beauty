@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neverending Math Grid</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 20px;
+      background: #f9f9f9;
+    }
+    .problem {
+      width: 120px;
+      height: 100px;
+      margin: 10px;
+      padding: 10px;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-around;
+    }
+    input[type="number"] {
+      width: 80px;
+    }
+  </style>
+</head>
+<body>
+  <script>
+    function generateProblem() {
+      const a = Math.floor(Math.random() * 20);
+      const b = Math.floor(Math.random() * 20);
+      return {
+        question: `${a} + ${b}`,
+        answer: a + b
+      };
+    }
+
+    function createProblemBox() {
+      const box = document.createElement('div');
+      box.className = 'problem';
+
+      let { question, answer } = generateProblem();
+
+      const q = document.createElement('div');
+      q.textContent = question;
+
+      const input = document.createElement('input');
+      input.type = 'number';
+
+      input.addEventListener('change', () => {
+        if (parseInt(input.value) === answer) {
+          // Clear old content
+          box.innerHTML = '';
+          ({ question, answer } = generateProblem());
+
+          const newQ = document.createElement('div');
+          newQ.textContent = question;
+          const newInput = document.createElement('input');
+          newInput.type = 'number';
+          newInput.addEventListener('change', () => {
+            if (parseInt(newInput.value) === answer) {
+              box.innerHTML = '';
+              const newBox = createProblemBox();
+              box.appendChild(newBox.firstChild);
+              box.appendChild(newBox.lastChild);
+            }
+          });
+
+          box.appendChild(newQ);
+          box.appendChild(newInput);
+        }
+      });
+
+      box.appendChild(q);
+      box.appendChild(input);
+
+      return box;
+    }
+
+    for (let i = 0; i < 50; i++) {
+      document.body.appendChild(createProblemBox());
+    }
+  </script>
+</body>
+</html>
