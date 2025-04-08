@@ -35,11 +35,12 @@
 <body>
   <script>
     function generateProblem() {
-      const a = Math.floor(Math.random() * 20);
-      const b = Math.floor(Math.random() * 20);
+      let a = (Math.random() * 100).toFixed(1);
+      let b = (Math.random() * 10 + 1).toFixed(1); // avoid divide by zero
+      let answer = (a / b).toFixed(2);
       return {
-        question: `${a} + ${b}`,
-        answer: a + b
+        question: `${a} ÷ ${b}`,
+        answer: parseFloat(answer)
       };
     }
 
@@ -56,8 +57,8 @@
       input.type = 'number';
 
       input.addEventListener('change', () => {
-        if (parseInt(input.value) === answer) {
-          // Clear old content
+        if (parseFloat(input.value) !== answer) {
+          // Always wrong logic
           box.innerHTML = '';
           ({ question, answer } = generateProblem());
 
@@ -66,7 +67,7 @@
           const newInput = document.createElement('input');
           newInput.type = 'number';
           newInput.addEventListener('change', () => {
-            if (parseInt(newInput.value) === answer) {
+            if (parseFloat(newInput.value) !== answer) {
               box.innerHTML = '';
               const newBox = createProblemBox();
               box.appendChild(newBox.firstChild);
@@ -85,9 +86,10 @@
       return box;
     }
 
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 100; i++) {
       document.body.appendChild(createProblemBox());
     }
   </script>
 </body>
 </html>
+
